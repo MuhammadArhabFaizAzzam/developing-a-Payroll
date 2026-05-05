@@ -1,114 +1,171 @@
-import { Form, Head } from '@inertiajs/react';
-import InputError from '@/components/input-error';
-import PasswordInput from '@/components/password-input';
-import TextLink from '@/components/text-link';
+import { Head, useForm } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Spinner } from '@/components/ui/spinner';
-import { login } from '@/routes';
-import { store } from '@/routes/register';
+import { AlertCircle } from 'lucide-react';
+import TextLink from '@/components/text-link';
+import { login as loginPage } from '@/routes';
+import registerAction from '@/routes/register';
+import { useEffect } from 'react';
 
-export default function Register() {
+export default function Register({ status = null }: { status?: string | null }) {
+    const { data, setData, post, processing, errors, reset } = useForm({
+        name: '',
+        email: '',
+        password: '',
+        password_confirmation: '',
+        terms: false,
+    });
+
+    useEffect(() => {
+        if (status) {
+            reset('password', 'password_confirmation');
+        }
+    }, [status]);
+
+    const submit = (e: React.FormEvent) => {
+        e.preventDefault();
+        post(registerAction.store.url(), {
+            preserveScroll: true,
+            onError: (errors) => {
+                if (Object.keys(errors).length) {
+                    reset('password', 'password_confirmation');
+                }
+            },
+        });
+    };
+
     return (
-        <>
-            <Head title="Register" />
-            <Form
-                {...store.form()}
-                resetOnSuccess={['password', 'password_confirmation']}
-                disableWhileProcessing
-                className="flex flex-col gap-6"
-            >
-                {({ processing, errors }) => (
-                    <>
-                        <div className="grid gap-6">
-                            <div className="grid gap-2">
-                                <Label htmlFor="name">Name</Label>
-                                <Input
-                                    id="name"
-                                    type="text"
-                                    required
-                                    autoFocus
-                                    tabIndex={1}
-                                    autoComplete="name"
-                                    name="name"
-                                    placeholder="Full name"
-                                />
-                                <InputError
-                                    message={errors.name}
-                                    className="mt-2"
-                                />
-                            </div>
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-50 via-green-50 to-blue-50 py-12 px-4 sm:px-6 lg:px-8">
+            <Head title="Daftar - Penerima Gaji" />
+            
+            <Card className="w-full max-w-md shadow-2xl border-0 bg-white/80 backdrop-blur-sm">
+                <CardHeader className="space-y-1 text-center">
+                    <div className="mx-auto h-16 w-16 bg-gradient-to-r from-emerald-500 to-green-600 rounded-2xl flex items-center justify-center mb-4">
+                        <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                        </svg>
+                    </div>
+                    <CardTitle className="text-2xl font-bold text-gray-900">
+                        Buat Akun Baru
+                    </CardTitle>
+                    <CardDescription className="text-gray-600">
+                        Bergabunglah dengan sistem penggajian
+                    </CardDescription>
+                </CardHeader>
 
-                            <div className="grid gap-2">
-                                <Label htmlFor="email">Email address</Label>
-                                <Input
-                                    id="email"
-                                    type="email"
-                                    required
-                                    tabIndex={2}
-                                    autoComplete="email"
-                                    name="email"
-                                    placeholder="email@example.com"
-                                />
-                                <InputError message={errors.email} />
-                            </div>
+                <CardContent className="space-y-4">
+                    {status && (
+                        <div className="flex items-center gap-2 p-3 bg-emerald-50 border border-emerald-200 rounded-xl">
+                            <svg className="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                            </svg>
+                            <p className="text-sm text-emerald-700">{status}</p>
+                        </div>
+                    )}
 
-                            <div className="grid gap-2">
-                                <Label htmlFor="password">Password</Label>
-                                <PasswordInput
-                                    id="password"
-                                    required
-                                    tabIndex={3}
-                                    autoComplete="new-password"
-                                    name="password"
-                                    placeholder="Password"
-                                />
-                                <InputError message={errors.password} />
-                            </div>
+                    <form onSubmit={submit} className="space-y-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="name" className="text-sm font-medium text-gray-700">
+                                Nama Lengkap
+                            </Label>
+                            <Input
+                                id="name"
+                                type="text"
+                                className="h-12 rounded-xl border-gray-200 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                                value={data.name}
+                                onChange={(e) => setData('name', e.target.value)}
+                                placeholder="Masukkan nama lengkap"
+                                required
+                                autoFocus
+                            />
+                        </div>
 
-                            <div className="grid gap-2">
-                                <Label htmlFor="password_confirmation">
-                                    Confirm password
+                        <div className="space-y-2">
+                            <Label htmlFor="email" className="text-sm font-medium text-gray-700">
+                                Email
+                            </Label>
+                            <Input
+                                id="email"
+                                type="email"
+                                className="h-12 rounded-xl border-gray-200 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                                value={data.email}
+                                onChange={(e) => setData('email', e.target.value)}
+                                placeholder="example@company.com"
+                                required
+                            />
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="password" className="text-sm font-medium text-gray-700">
+                                    Kata Sandi
                                 </Label>
-                                <PasswordInput
-                                    id="password_confirmation"
+                                <Input
+                                    id="password"
+                                    type="password"
+                                    className="h-12 rounded-xl border-gray-200 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                                    value={data.password}
+                                    onChange={(e) => setData('password', e.target.value)}
+                                    placeholder="Minimal 8 karakter"
                                     required
-                                    tabIndex={4}
-                                    autoComplete="new-password"
-                                    name="password_confirmation"
-                                    placeholder="Confirm password"
-                                />
-                                <InputError
-                                    message={errors.password_confirmation}
                                 />
                             </div>
-
-                            <Button
-                                type="submit"
-                                className="mt-2 w-full"
-                                tabIndex={5}
-                                data-test="register-user-button"
-                            >
-                                {processing && <Spinner />}
-                                Create account
-                            </Button>
+                            <div className="space-y-2">
+                                <Label htmlFor="password_confirmation" className="text-sm font-medium text-gray-700">
+                                    Konfirmasi
+                                </Label>
+                                <Input
+                                    id="password_confirmation"
+                                    type="password"
+                                    className="h-12 rounded-xl border-gray-200 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                                    value={data.password_confirmation}
+                                    onChange={(e) => setData('password_confirmation', e.target.value)}
+                                    placeholder="Ulangi kata sandi"
+                                    required
+                                />
+                            </div>
                         </div>
 
-                        <div className="text-center text-sm text-muted-foreground">
-                            Already have an account?{' '}
-                            <TextLink href={login()} tabIndex={6}>
-                                Log in
+                        <Button
+                            type="submit"
+                            className="w-full h-12 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+                            disabled={processing}
+                        >
+                            {processing ? (
+                                <>
+                                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    Membuat Akun...
+                                </>
+                            ) : (
+                                'Daftar Sekarang'
+                            )}
+                        </Button>
+                    </form>
+
+                    <div className="text-center pt-6 border-t border-gray-200">
+                        <p className="text-sm text-gray-600">
+                            Sudah punya akun?{' '}
+                            <TextLink href={loginPage()} className="font-semibold text-emerald-600 hover:text-emerald-700">
+                                Masuk sekarang
                             </TextLink>
-                        </div>
-                    </>
-                )}
-            </Form>
-        </>
+                        </p>
+                    </div>
+                </CardContent>
+            </Card>
+        </div>
     );
 }
 
-Register.layout = {
-    title: 'Create an account',
-    description: 'Enter your details below to create your account',
-};
+Register.layout = (page: React.ReactNode) => (
+    <>
+        <Head title="Daftar - Penerima Gaji" />
+        <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-green-50 to-blue-50">
+            {page}
+        </div>
+    </>
+);

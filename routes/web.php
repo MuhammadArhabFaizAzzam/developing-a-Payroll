@@ -11,8 +11,9 @@ Route::inertia('/', 'welcome', [
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Payroll Blade Routes
-    require __DIR__.'/web-payroll.php';
+    Route::middleware('role:admin')->group(function () {
+        require __DIR__.'/web-payroll.php';
+    });
 });
 
 require __DIR__.'/settings.php';

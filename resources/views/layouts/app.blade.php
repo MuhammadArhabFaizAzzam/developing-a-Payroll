@@ -109,6 +109,10 @@
     @yield('styles')
 </head>
 <body>
+    @php
+        $authUser = auth()->user();
+        $isAdmin = $authUser?->role === 'admin';
+    @endphp
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
@@ -123,21 +127,16 @@
                     <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
                         <i class="bi bi-speedometer2"></i> Dashboard
                     </a>
-                    <a class="nav-link {{ request()->routeIs('employees.*') ? 'active' : '' }}" href="{{ route('employees.index') }}">
-                        <i class="bi bi-people"></i> Karyawan
-                    </a>
-                    <a class="nav-link {{ request()->routeIs('payrolls.*') ? 'active' : '' }}" href="{{ route('payrolls.index') }}">
-                        <i class="bi bi-cash"></i> Penggajian
-                    </a>
-                    <a class="nav-link" href="#">
-                        <i class="bi bi-file-earmark-text"></i> Laporan
-                    </a>
-                    <div class="dropdown-divider my-2"></div>
-                    <a class="nav-link" href="#">
-                        <i class="bi bi-gear"></i> Pengaturan
-                    </a>
-                    <a class="nav-link" href="#">
-                        <i class="bi bi-box-arrow-left"></i> Logout
+                    @if($isAdmin)
+                        <a class="nav-link {{ request()->routeIs('employees.*') ? 'active' : '' }}" href="{{ route('employees.index') }}">
+                            <i class="bi bi-people"></i> Karyawan
+                        </a>
+                        <a class="nav-link {{ request()->routeIs('payrolls.*') ? 'active' : '' }}" href="{{ route('payrolls.index') }}">
+                            <i class="bi bi-cash"></i> Penggajian
+                        </a>
+                    @endif
+                    <a class="nav-link {{ request()->routeIs('profile.edit') ? 'active' : '' }}" href="{{ route('profile.edit') }}">
+                        <i class="bi bi-gear"></i> Pengaturan Akun
                     </a>
                 </nav>
             </div>
@@ -153,12 +152,25 @@
                         <div class="d-flex align-items-center ms-auto">
                             <div class="dropdown">
                                 <a class="btn btn-outline-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                                    <i class="bi bi-person-circle"></i> Admin
+                                    <i class="bi bi-person-circle"></i> {{ $authUser?->name ?? 'Pengguna' }}
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#">Profil</a></li>
+                                    <li>
+                                        <span class="dropdown-item-text text-muted small">
+                                            {{ $isAdmin ? 'Administrator' : 'Karyawan' }}
+                                        </span>
+                                    </li>
+                                    <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Profil</a></li>
+                                    @if($isAdmin)
+                                        <li><a class="dropdown-item" href="{{ route('security.edit') }}">Keamanan</a></li>
+                                    @endif
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">Logout</a></li>
+                                    <li>
+                                        <form method="POST" action="{{ route('logout') }}">
+                                            @csrf
+                                            <button type="submit" class="dropdown-item">Logout</button>
+                                        </form>
+                                    </li>
                                 </ul>
                             </div>
                         </div>

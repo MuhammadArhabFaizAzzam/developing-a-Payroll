@@ -24,4 +24,41 @@ class DashboardTest extends TestCase
         $response = $this->get(route('dashboard'));
         $response->assertOk();
     }
+
+    public function test_admin_users_see_the_admin_dashboard()
+    {
+        $admin = User::factory()->create([
+            'role' => 'admin',
+        ]);
+
+        $response = $this->actingAs($admin)->get(route('dashboard'));
+
+        $response
+            ->assertOk()
+            ->assertSee('Total Karyawan');
+    }
+
+    public function test_regular_users_see_the_user_dashboard()
+    {
+        $user = User::factory()->create([
+            'role' => 'user',
+        ]);
+
+        $response = $this->actingAs($user)->get(route('dashboard'));
+
+        $response
+            ->assertOk()
+            ->assertSee('Dashboard Saya');
+    }
+
+    public function test_regular_users_cannot_access_admin_payroll_routes()
+    {
+        $user = User::factory()->create([
+            'role' => 'user',
+        ]);
+
+        $response = $this->actingAs($user)->get(route('employees.index'));
+
+        $response->assertForbidden();
+    }
 }

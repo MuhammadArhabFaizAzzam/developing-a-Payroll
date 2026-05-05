@@ -4,10 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\Employee;
 use App\Models\Payroll;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
+    {
+        if ($request->user()?->role === 'admin') {
+            return $this->adminDashboard();
+        }
+
+        return app(UserDashboardController::class)->index($request);
+    }
+
+    private function adminDashboard()
     {
         $totalKaryawan = Employee::count();
         $karyawanAktif = Employee::where('status', 'aktif')->count();
