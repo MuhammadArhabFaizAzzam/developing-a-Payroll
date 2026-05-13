@@ -37,12 +37,12 @@ export default function Register({ status = null }: { status?: string | null }) 
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-50 via-green-50 to-blue-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-emerald-50 via-green-50 to-blue-50 py-12 px-4 sm:px-6 lg:px-8">
             <Head title="Daftar - Penerima Gaji" />
             
             <Card className="w-full max-w-md shadow-2xl border-0 bg-white/80 backdrop-blur-sm">
                 <CardHeader className="space-y-1 text-center">
-                    <div className="mx-auto h-16 w-16 bg-gradient-to-r from-emerald-500 to-green-600 rounded-2xl flex items-center justify-center mb-4">
+                    <div className="mx-auto h-16 w-16 bg-linear-to-r from-emerald-500 to-green-600 rounded-2xl flex items-center justify-center mb-4">
                         <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
                         </svg>
@@ -130,7 +130,7 @@ export default function Register({ status = null }: { status?: string | null }) 
 
                         <Button
                             type="submit"
-                            className="w-full h-12 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+                            className="w-full h-12 bg-linear-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
                             disabled={processing}
                         >
                             {processing ? (
@@ -164,7 +164,7 @@ export default function Register({ status = null }: { status?: string | null }) 
 Register.layout = (page: React.ReactNode) => (
     <>
         <Head title="Daftar - Penerima Gaji" />
-        <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-green-50 to-blue-50">
+        <div className="min-h-screen bg-linear-to-br from-emerald-50 via-green-50 to-blue-50">
             {page}
         </div>
     </>

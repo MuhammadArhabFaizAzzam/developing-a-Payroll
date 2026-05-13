@@ -37,6 +37,26 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
 
+        <script>
+            window.route = (name, params) => {
+                const routes = {
+                    'home': '/',
+                    'dashboard': '/dashboard',
+                    'user.dashboard': '/user/dashboard',
+                    'admin.dashboard': '/admin/dashboard',
+                    'login': '/login',
+                    'register': '/register',
+                    'password.request': '/forgot-password',
+                    'password.reset': '/reset-password',
+                };
+                let url = routes[name] || '/';
+                if (params && Object.keys(params).length > 0) {
+                    url = url + '/' + Object.values(params).join('/');
+                }
+                return url;
+            };
+        </script>
+
         @viteReactRefresh
         @vite(['resources/css/app.css', 'resources/js/app.tsx', "resources/js/pages/{$page['component']}.tsx"])
         <x-inertia::head>

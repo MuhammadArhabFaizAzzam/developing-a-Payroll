@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { AlertCircle } from 'lucide-react';
 import TextLink from '@/components/text-link';
 import { request as passwordRequest } from '@/routes/password';
+import { register as registerPage } from '@/routes';
 import loginAction from '@/routes/login';
 import { useEffect } from 'react';
 
@@ -35,12 +36,12 @@ export default function Login({ status = null }: { status?: string | null }) {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
             <Head title="Masuk - Penerima Gaji" />
             
             <Card className="w-full max-w-md shadow-2xl border-0 bg-white/80 backdrop-blur-sm">
                 <CardHeader className="space-y-1 text-center">
-                    <div className="mx-auto h-16 w-16 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center mb-4">
+                    <div className="mx-auto h-16 w-16 bg-linear-to-r from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center mb-4">
                         <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                         </svg>
@@ -112,7 +113,7 @@ export default function Login({ status = null }: { status?: string | null }) {
 
                         <Button
                             type="submit"
-                            className="w-full h-12 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+                            className="w-full h-12 bg-linear-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
                             disabled={processing}
                         >
                             {processing ? (
@@ -129,7 +130,13 @@ export default function Login({ status = null }: { status?: string | null }) {
                         </Button>
                     </form>
 
-                    <div className="text-center py-4">
+                    <div className="text-center py-4 border-t border-gray-200">
+                        <p className="text-sm text-gray-600 mb-3">
+                            Belum punya akun?{' '}
+                            <TextLink href={registerPage()} className="font-semibold text-blue-600 hover:text-blue-700">
+                                Daftar sekarang
+                            </TextLink>
+                        </p>
                         <p className="text-xs text-gray-500">
                             © 2025 Penerima Gaji. Semua hak dilindungi.
                         </p>
@@ -143,7 +150,7 @@ export default function Login({ status = null }: { status?: string | null }) {
 Login.layout = (page: React.ReactNode) => (
     <>
         <Head title="Masuk - Penerima Gaji" />
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+        <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100">
             {page}
         </div>
     </>

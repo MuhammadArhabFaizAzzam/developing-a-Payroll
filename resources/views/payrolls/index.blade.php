@@ -105,6 +105,7 @@
                             <th class="text-end">Potongan</th>
                             <th class="text-end">Gaji Bersih</th>
                             <th>Status</th>
+                            <th>Pengambilan</th>
                             <th width="150">Aksi</th>
                         </tr>
                     </thead>
@@ -138,6 +139,17 @@
                                 </span>
                             </td>
                             <td>
+                                @if($p->taken_at)
+                                    <span class="badge bg-success">Diambil</span>
+                                    <br>
+                                    <small class="text-muted">{{ $p->taken_at->format('d M Y H:i') }}</small>
+                                @elseif($p->status === 'dibayar')
+                                    <span class="badge bg-info text-dark">Belum diambil</span>
+                                @else
+                                    <span class="text-muted small">Belum dibayar</span>
+                                @endif
+                            </td>
+                            <td>
                                 <a href="{{ route('payrolls.slip-gaji', $p->id) }}" class="btn btn-sm btn-outline-primary" target="_blank" title="Cetak Slip">
                                     <i class="bi bi-file-earmark-text"></i>
                                 </a>
@@ -153,7 +165,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="11" class="text-center text-muted py-4">
+                            <td colspan="12" class="text-center text-muted py-4">
                                 <i class="bi bi-inbox" style="font-size: 2rem;"></i>
                                 <p class="mb-0">Belum ada data penggajian</p>
                             </td>

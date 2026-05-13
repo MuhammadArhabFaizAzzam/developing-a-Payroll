@@ -28,6 +28,7 @@ class Payroll extends Model
         'gaji_bersih',
         'status',
         'tanggal_bayar',
+        'taken_at',
         'keterangan',
     ];
 
@@ -45,6 +46,7 @@ class Payroll extends Model
         'total_potongan' => 'decimal:2',
         'gaji_bersih' => 'decimal:2',
         'tanggal_bayar' => 'date',
+        'taken_at' => 'datetime',
     ];
 
     public function employee(): BelongsTo

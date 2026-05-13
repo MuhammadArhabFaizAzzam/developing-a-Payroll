@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Employee;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class EmployeeController extends Controller
 {
@@ -12,7 +13,7 @@ class EmployeeController extends Controller
         $search = $request->get('search', '');
         $status = $request->get('status', '');
 
-        $query = Employee::query();
+        $query = Employee::query()->with('latestPayroll');
 
         if ($search) {
             $query->cari($search);
@@ -24,7 +25,7 @@ class EmployeeController extends Controller
 
         $employees = $query->orderBy('nama', 'asc')->paginate(10);
 
-        return view('employees.index', compact('employees', 'search', 'status'));
+        return Inertia::render('employees/index', compact('employees', 'search', 'status'));
     }
 
     public function create()
